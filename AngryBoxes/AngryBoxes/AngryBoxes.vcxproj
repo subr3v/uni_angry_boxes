@@ -80,6 +80,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelScreenState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OrientedBoundingBox.cpp" />
     <ClCompile Include="PhysicObject.cpp" />
     <ClCompile Include="PhysicsSimulation.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
