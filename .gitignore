@@ -1,0 +1,5 @@
+*.opensdf
+AngryBoxes/AngryBoxes/Debug/vc110.idb
+*.tlog
+AngryBoxes/AngryBoxes/Debug/
+*.sdf
