@@ -1,10 +1,15 @@
-#include "GameApp.h"
+#include "GraphicsContext.h"
 
-#include <sfml/Window.hpp>
-
-int main(int argc, char **argv)
+int main()
 {
-	sf::Window w;
+    // create the window
+    //sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+	GraphicsContext graphicsContext;
 
-	return 0;
+	while (true)
+	{
+		graphicsContext.Update();
+	}
+
+    return 0;
 }
