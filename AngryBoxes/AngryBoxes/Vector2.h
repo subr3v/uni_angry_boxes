@@ -19,6 +19,10 @@ public:
 		}
 	}
 
+	float dot(const Vector2& other) {
+		return x * other.x + y * other.y;
+	}
+
 	float getLength() const { return sqrt(x * x + y * y); }
 
 	bool operator==(const Vector2 &other) const {
