@@ -21,6 +21,8 @@ public:
 	inline void gravity(const Vector2& gravity) { m_gravity = gravity; }
 	inline const Vector2 gravity() const { return m_gravity; }
 private:
+	void collisionCheckAndRespond(PhysicsObject* obj);
+
 	std::vector<PhysicsObject*> m_objects;
 	Vector2 m_gravity;
 };

@@ -5,17 +5,15 @@
 #include <cmath>
 #include <cfloat>
 
-struct OverlapInfo
+struct OverlapResult
 {
 	bool overlaps;
-	float min, max;
-	float amount;
+	float amount[2];
 
-	OverlapInfo()
+	OverlapResult()
 	{
+		amount[0] = amount[1] = 0;
 		overlaps = false;
-		min = max = 0.0f;
-		amount = 0;
 	}
 };
 
@@ -35,8 +33,6 @@ public:
 	//The origin where origin[a] = corner[0].dot(axis[a]);
 	float origin[2];
 
-	OverlapInfo overlapInfo[2];
-
 	//Calculates the length of the axes based on the current corner positions
 	void GetAxes(){
 		axis[0] = corner[1] - corner[0];
@@ -51,12 +47,13 @@ public:
 		}
 	}
 
-	bool Overlaps(OrientedBoundingBox& other) {
-        return Overlaps1Way(other) && other.Overlaps1Way(*this);
+	bool Overlaps(OrientedBoundingBox& other, OverlapResult& result) {
+		bool collides = Overlaps1Way(other, &result) && other.Overlaps1Way(*this, nullptr);
+        return collides;
     }
 
 	//Will return true if 'other' overlaps one dimension of 'this'
-	bool Overlaps1Way(OrientedBoundingBox& other) {
+	bool Overlaps1Way(OrientedBoundingBox& other, OverlapResult* result) {
 
 		for (int a = 0; a < 2; a++) {
 
@@ -77,22 +74,24 @@ public:
             }
 
 			// We have to subtract off the origin
-
-			overlapInfo[a].min = tMin;
-			overlapInfo[a].max = tMax;
-			overlapInfo[a].overlaps = ((tMin > 1 + origin[a]) || (tMax < origin[a])) == false;
+			bool overlaps = ((tMin > 1 + origin[a]) || (tMax < origin[a])) == false;
 			
-			if (overlapInfo[a].overlaps)
+			if (overlaps)
 			{
-				if ( (tMin > 1 + origin[a]) )
+				if (result != nullptr)
 				{
-					overlapInfo[a].amount = tMin;
-				}
-				else
-				{
-					overlapInfo[a].amount = tMax;
+					if ( (tMin > 1 + origin[a]) )
+					{
+						result->amount[a] = tMin;
+					}
+					else
+					{
+						result->amount[a] = tMax;
+					}
 				}
 			} else {
+				if (result != nullptr)
+					result->amount[a] = 0;
 				return false;
 			}
 			

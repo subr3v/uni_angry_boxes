@@ -16,7 +16,7 @@ void GraphicsContext::DrawOrientedBoundingBox(const OrientedBoundingBox& box)
 		polygon.setPoint(i, sf::Vector2f(box.corner[i].x, box.corner[i].y));
 	polygon.setOutlineColor(sf::Color::White);
 	polygon.setFillColor(sf::Color::Transparent);
-	polygon.setOutlineThickness(1);
+	polygon.setOutlineThickness(-1);
 
 	for(int i = 0; i < 2; i++)
 	{
@@ -27,15 +27,16 @@ void GraphicsContext::DrawOrientedBoundingBox(const OrientedBoundingBox& box)
 		axis.setRotation(rotation * 180 / M_PI);
 
 		window_.draw(axis);
-		if( box.overlapInfo[i].overlaps )
+		/*
+		if(  box.overlapInfo[i].overlaps )
 		{
-			sf::RectangleShape correction(sf::Vector2f(box.overlapInfo[i].max - box.overlapInfo[i].min * 100, 1));
+			sf::RectangleShape correction(sf::Vector2f(box.overlapInfo[i].amount, 1));
 			correction.setPosition(sf::Vector2f(box.corner[0].x, box.corner[0].y));
 			correction.setRotation(rotation * 180 / M_PI);
 			correction.setFillColor(sf::Color::Blue);
 
 			window_.draw(correction);
-		}
+		}*/
 	}
 
 	window_.draw(polygon);
