@@ -45,31 +45,60 @@ void InputManager::getInput()
 			{
 				if(EventManager.mouseButton.button == sf::Mouse::Left)
 				{
-					releaseBox(EventManager.mouseButton.x, EventManager.mouseButton.y);
+					releaseBox = true;
+					xDragEnd = EventManager.mouseButton.x;
+					yDragEnd = EventManager.mouseButton.y;
 				}
 
 				break;
+			}
+
+			case sf::Keyboard::Escape :
+			{
+				windowPointer->close();
 			}
 		}
 	}
 }
 
 
-//Launches box if appropriate
-void InputManager::releaseBox(float x, float y)
+//Get funtions to return appropriate variable
+bool InputManager::getReleaseBox()
 {
-	float xLength = 0;
-	float yLength = 0;
-	float releaseAngle = 0;
-	float releaseVelocity = 0;
+	return releaseBox;
+}
 
-	xLength = xDragStart - x;
-	yLength = yDragStart - y;
+void InputManager::setReleaseBox(bool newReleaseBox)
+{
+	releaseBox = newReleaseBox;
+}
 
-	releaseAngle = atan(yLength/xLength);
+int InputManager::getXDragStart()
+{
+	return xDragStart;
+}
 
-	releaseVelocity =  sqrt(pow(xLength, 2) + pow(yLength, 2)) * VELOCITY_MOD;
+int InputManager::getYDragStart()
+{
+	return yDragStart;
+}
 
+int InputManager::getXDragEnd()
+{
+	return xDragEnd;
+}
 
-	
+int InputManager::getYDragEnd()
+{
+	return yDragEnd;
+}
+
+int InputManager::getCurrentXPos()
+{
+	return currentXPos;
+}
+
+int InputManager::getCurrentYPos()
+{
+	return currentYPos;
 }
