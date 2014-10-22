@@ -15,7 +15,7 @@ public:
 	inline float mass() const { return m_mass; }
 	inline float rotation() const { return m_rotation; }
 	inline bool immovable() const { return m_immovable; }
-	inline const OrientedBoundingBox shape() { return m_shape; }
+	inline OrientedBoundingBox& shape() { return m_shape; }
 
 	inline void position(const Vector2& position) { m_position = position; }
 	inline void velocity(const Vector2& velocity) { m_velocity = velocity; }

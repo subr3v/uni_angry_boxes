@@ -49,7 +49,17 @@ void PhysicsSimulation::step(float dt) {
 		for(std::vector<PhysicsObject*>::iterator otherIt = it + 1; otherIt != m_objects.end(); otherIt++) {
 			PhysicsObject* collider = *otherIt;
 
-			if (object->shape().Overlaps(collider->shape())) {
+			OrientedBoundingBox objectBox = object->shape();
+			if (objectBox.Overlaps(collider->shape())) {
+
+				for ( int i = 0; i < 2; i++ )
+				{
+					float len = i == 0 ? objectBox.width : objectBox.height;
+					float correction = objectBox.overlapInfo[i].amount;
+					Vector2 offset = objectBox.axis[i] * correction;
+					object->position(object->position() - offset);
+				}
+
 				object->velocity(Vector2(0,0));
 				object->angularVelocity(0);
 			}
