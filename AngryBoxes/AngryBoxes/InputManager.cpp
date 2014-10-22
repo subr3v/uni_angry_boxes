@@ -1,5 +1,6 @@
 #include "InputManager.h"
 
+
 void InputManager::init(sf::Window* applicationPointer)
 {
 	windowPointer = applicationPointer;
@@ -54,8 +55,21 @@ void InputManager::getInput()
 }
 
 
-//Launches bird if appropriate
-void releaseBox(int x, int y)
+//Launches box if appropriate
+void InputManager::releaseBox(float x, float y)
 {
+	float xLength = 0;
+	float yLength = 0;
+	float releaseAngle = 0;
+	float releaseVelocity = 0;
 
+	xLength = xDragStart - x;
+	yLength = yDragStart - y;
+
+	releaseAngle = atan(yLength/xLength);
+
+	releaseVelocity =  sqrt(pow(xLength, 2) + pow(yLength, 2)) * VELOCITY_MOD;
+
+
+	
 }

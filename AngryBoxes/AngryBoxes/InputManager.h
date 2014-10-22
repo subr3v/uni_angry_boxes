@@ -2,10 +2,14 @@
 #define InputManager_h__
 
 #include <SFML/Window.hpp>
+#include "cmath"
+
 
 
 class InputManager
 {
+
+#define VELOCITY_MOD 0.5f; //Modifier to change velocity to workable number
 
 public:
 
@@ -14,7 +18,7 @@ public:
 
 protected:
 
-	void releaseBox(int, int);
+	void releaseBox(float, float);
 
 	//instance of event class which stores event
 	sf::Event EventManager; 
