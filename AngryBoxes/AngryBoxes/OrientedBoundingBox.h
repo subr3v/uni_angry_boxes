@@ -5,7 +5,7 @@
 #include <cmath>
 
 class OrientedBoundingBox {
-private:
+public:
 	float width;
 	float height;
 
@@ -21,7 +21,7 @@ private:
 	//Calculates the length of the axes based on the current corner positions
 	void GetAxes(){
 		axis[0] = corner[1] - corner[0];
-		axis[0] = corner[3] - corner[0];
+		axis[1] = corner[3] - corner[0];
 
 		// Make the length of each axis 1/edge length so we know any
 		// dot product must be less than 1 to fall within the edge.
@@ -32,9 +32,13 @@ private:
 		}
 	}
 
+	bool Overlaps(const OrientedBoundingBox& other) const {
+        return Overlaps1Way(other) && other.Overlaps1Way(*this);
+    }
+
 	//Will return true if 'other' overlaps one dimension of 'this'
-	bool Overlaps(const OrientedBoundingBox& other) const{
-		for (int a = 0; a < 2; a++){
+	bool Overlaps1Way(const OrientedBoundingBox& other) const{
+		for (int a = 0; a < 2; a++) {
 
 			float t = other.corner[0].dot(axis[a]);
 
@@ -50,17 +54,19 @@ private:
 				} else if (t > tMax) {
 					tMax = t;
 				}
+			}
 
-				// We have to subtract off the origin
+			// We have to subtract off the origin
 
-				// See if [tMin, tMax] intersects [0, 1]
-				if ((tMin > 1 + origin[a]) || (tMax < origin[a])) {
-					// There was no intersection along this dimension;
-					// the boxes cannot possibly overlap.
-					return false;
-				}
+			// See if [tMin, tMax] intersects [0, 1]
+			if ((tMin > 1 + origin[a]) || (tMax < origin[a])) {
+				// There was no intersection along this dimension;
+				// the boxes cannot possibly overlap.
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 public:
