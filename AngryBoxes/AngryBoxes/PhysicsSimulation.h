@@ -16,6 +16,8 @@ public:
 	void destroyObject(PhysicsObject* object);
 	void step(float dt);
 
+	const std::vector<PhysicsObject*>& getObjects() { return m_objects; }
+
 	inline void gravity(const Vector2& gravity) { m_gravity = gravity; }
 	inline const Vector2 gravity() const { return m_gravity; }
 private:
