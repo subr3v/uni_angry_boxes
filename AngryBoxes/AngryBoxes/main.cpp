@@ -17,8 +17,10 @@ int main()
 	simulation.gravity(Vector2(0, 9.8f));
 
 	PhysicsObject* obj = simulation.createObject(50, Vector2(150, 150), OrientedBoundingBox(Vector2(0, 0), 50, 50, 0));
+	PhysicsObject* obj1 = simulation.createObject(50, Vector2(180, 150), OrientedBoundingBox(Vector2(0, 0), 50, 50, 0));
 	PhysicsObject* ground = simulation.createObject(100, Vector2(400, 600 - 120), OrientedBoundingBox(Vector2(0, 0), 800, 120, 0));
 	ground->immovable(true);
+	obj1->rotation(30.0f / 180.0f * M_PI);
 
 	obj->angularVelocity(90.0f / 180.0f * M_PI);
 
