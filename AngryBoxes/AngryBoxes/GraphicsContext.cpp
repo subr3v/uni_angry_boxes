@@ -42,6 +42,12 @@ void GraphicsContext::DrawOrientedBoundingBox(const OrientedBoundingBox& box)
 	window_.draw(polygon);
 }
 
+void GraphicsContext::DrawGameObject(GameObject& object)
+{
+	object.updateGraphics();
+	window_.draw(object.getSprite());
+}
+
 void GraphicsContext::SwapBuffers()
 {
 	window_.display();
