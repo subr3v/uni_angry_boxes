@@ -7,8 +7,8 @@ class Vector2 {
 public:
 	Vector2() { }
 	Vector2(float x, float y) {
-		x = x;
-		y = y;
+		this->x = x;
+		this->y = y;
 	}
 
 	void normalize() {
@@ -60,6 +60,12 @@ public:
 	Vector2 &operator+=(float value) {
 		x += value;
 		y += value;
+		return *this;
+	}
+
+	Vector2 &operator+=(const Vector2 &other) {
+		x += other.x;
+		y += other.y;
 		return *this;
 	}
 
