@@ -3,12 +3,19 @@
 
 #include <SFML/Graphics.hpp>
 #include "Texture.h"
+#include "OrientedBoundingBox.h"
+#include "GameObject.h"
 
 class GraphicsContext
 {
 public:
 	GraphicsContext();
+
+	void DrawOrientedBoundingBox(const OrientedBoundingBox& box);
+	void DrawGameObject(GameObject&);
+	void Clear();
 	void Update();
+	void SwapBuffers();
 
 private:
 	sf::RenderWindow window_;
