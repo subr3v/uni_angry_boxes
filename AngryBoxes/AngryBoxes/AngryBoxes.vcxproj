@@ -73,6 +73,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameplayState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
