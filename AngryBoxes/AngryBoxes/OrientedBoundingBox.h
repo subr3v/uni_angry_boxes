@@ -4,15 +4,22 @@
 #include "Vector2.h"
 #include <cmath>
 #include <cfloat>
+#include <algorithm>
 
 struct OverlapResult
 {
 	bool overlaps;
-	float amount[2];
+	Vector2 contactPoints[2];
+	Vector2 normal;
+	float penetration;
+	int contactCount;
 
 	OverlapResult()
 	{
-		amount[0] = amount[1] = 0;
+		normal = Vector2(0, 0);
+		contactCount = 0;
+		contactPoints[0] = contactPoints[1] = Vector2(0, 0);
+		penetration = 0;
 		overlaps = false;
 	}
 };
@@ -23,6 +30,7 @@ public:
 	float height;
 
 	Vector2 center;
+
 
 	//The corners of the box, starting where 0 = lower left and working clockwise.
 	Vector2 corner[4];
@@ -53,60 +61,7 @@ public:
     }
 
 	//Will return true if 'other' overlaps one dimension of 'this'
-	bool Overlaps1Way(OrientedBoundingBox& other, OverlapResult* result) {
-
-		for (int a = 0; a < 2; a++) {
-
-			float t = other.corner[0].dot(axis[a]);
-
-            // Find the extent of box 2 on axis a
-            float tMin = t;
-            float tMax = t;
-
-            for (int c = 1; c < 4; ++c) {
-                t = other.corner[c].dot(axis[a]);
-
-                if (t < tMin) {
-                    tMin = t;
-                } else if (t > tMax) {
-                    tMax = t;
-                }
-            }
-
-			// We have to subtract off the origin
-			bool overlaps = ((tMin > 1 + origin[a]) || (tMax < origin[a])) == false;
-			
-			if (overlaps)
-			{
-				if (result != nullptr)
-				{
-					if ( (tMin > 1 + origin[a]) )
-					{
-						result->amount[a] = tMin;
-					}
-					else
-					{
-						result->amount[a] = tMax;
-					}
-				}
-			} else {
-				if (result != nullptr)
-					result->amount[a] = 0;
-				return false;
-			}
-			
-			/*
-			// See if [tMin, tMax] intersects [0, 1]
-			if ((tMin > 1 + origin[a]) || (tMax < origin[a])) {
-				// There was no intersection along this dimension;
-				// the boxes cannot possibly overlap.
-				return false;
-			}
-			*/
-		}
-
-		return true;
-	}
+	bool Overlaps1Way(OrientedBoundingBox& other, OverlapResult* result);
 
 public:
 	OrientedBoundingBox() { }

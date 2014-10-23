@@ -1,5 +1,6 @@
 #include "PhysicsSimulation.h"
 #include "PhysicObject.h"
+#include "GraphicsContext.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -31,60 +32,84 @@ void PhysicsSimulation::destroyObject(PhysicsObject* object) {
 }
 
 void PhysicsSimulation::step(float dt) {
-	// Move Objects
 
-	for(std::vector<PhysicsObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++) {
-		PhysicsObject* obj = *it;
+	contacts.clear();
 
-		PhysicsObject nextState = *obj;
+	// Generate collision info.
+	for(int i = 0; i < m_objects.size(); ++i)
+	{
+		PhysicsObject *a = m_objects[i];
 
-		if (obj->immovable() == false)
+		for(int j = 0; j < m_objects.size(); ++j)
 		{
-			obj->m_velocity += m_gravity * dt;
-			obj->m_angularVelocity *= 0.1;
+			if( j == i)
+				continue;
 
-			obj->m_rotation += nextState.m_angularVelocity * dt;
-			obj->m_shape.UpdateOBB2D(nextState.position(), nextState.rotation());
-			collisionCheckAndRespond(obj);
+			PhysicsObject *b = m_objects[j];
 
-			obj->m_position.y += nextState.m_velocity.y * dt;
-			obj->m_shape.UpdateOBB2D(nextState.position(), nextState.rotation());
-			collisionCheckAndRespond(obj);
+			if( a->inverseMass == 0 && b->inverseMass == 0)
+				continue;
 
-			obj->m_position.x += nextState.m_velocity.x * dt;
-			obj->m_shape.UpdateOBB2D(nextState.position(), nextState.rotation());
-			collisionCheckAndRespond(obj);
+			Manifold m(this, a, b);
+			m.solve();
+
+			if(m.contactCount > 0)
+				contacts.emplace_back(m);
 		}
-
-		obj->m_shape.UpdateOBB2D(nextState.position(), nextState.rotation());
 	}
 
-	// Detect collision
-	
-	// Collision response
+	// Integrate forces
+	for(std::vector<PhysicsObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++) {
+		integrateForce((*it), dt);
+	}
+
+	// Initialise collision
+	for(int i = 0; i < contacts.size( ); ++i)
+		contacts[i].init(dt);
+
+	const int kIterationNumber = 16;
+	// Solve collision
+	for(int j = 0; j < kIterationNumber; ++j)
+		for(int i = 0; i < contacts.size( ); ++i)
+			contacts[i].applyImpulse();
+
+	// Integrate velocities
+	for(std::vector<PhysicsObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++) {
+		integrateVelocity((*it), dt);
+	}
+
+	// Correct positions
+	for(int i = 0; i < contacts.size( ); ++i)
+		contacts[i].solvePosition();
+
+	// Clear forces
+	for(std::vector<PhysicsObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++) {
+		(*it)->force = Vector2(0, 0);
+		(*it)->torque = 0;
+	}
 }
 
-void PhysicsSimulation::collisionCheckAndRespond(PhysicsObject* obj)
+void PhysicsSimulation::integrateForce( PhysicsObject* object, float dt )
 {
-	PhysicsObject& myObject = *obj;
-	for(std::vector<PhysicsObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++) 
+	if (object->mass != 0)
 	{
-		PhysicsObject* collider = *it;
-		if( collider == obj )
-			continue;
+		// We divide dt by a half because we're integrating forces before and after collision every frame.
+		object->velocity += (object->force * object->inverseMass + m_gravity) * dt * 0.5f;
+		object->angularVelocity += object->torque * object->inverseInertia * dt * 0.5f;
+		context->DrawLine(object->position, object->position + object->force * 150, sf::Color::Red);
+	}
+}
 
-		OverlapResult result;
-		if (myObject.m_shape.Overlaps(collider->shape(), result)) {
-			
-			for ( int i = 0; i < 2; i++ )
-			{
-				float correction = result.amount[i];
-				Vector2 offset = myObject.m_shape.axis[i] * correction * 2;
-				myObject.position(myObject.position() - offset);
-			}
+void PhysicsSimulation::integrateVelocity( PhysicsObject* object, float dt )
+{
+	if (object->mass != 0)
+	{
+		object->position += object->velocity * dt;
+		object->rotation += object->angularVelocity * dt;
 
-			//myObject.velocity(Vector2(0,0));
-			//nextState.angularVelocity(angularVel);
-		}
+		context->DrawLine(object->position, object->position + object->velocity);
+
+		object->shape.UpdateOBB2D(object->position, object->rotation);
+		integrateForce(object, dt);
 	}
 }

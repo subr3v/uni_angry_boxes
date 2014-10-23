@@ -3,8 +3,11 @@
 
 #define M_PI 3.14159265358979323846
 
+GraphicsContext *context;
+
 GraphicsContext::GraphicsContext() : window_(sf::VideoMode(800, 600), "Angry Boxes")
 {
+	context = this;
 	tempSprite_.setTexture(redTexture.GetTexture());
 }
 
@@ -26,7 +29,7 @@ void GraphicsContext::DrawOrientedBoundingBox(const OrientedBoundingBox& box)
 		float rotation = atan2(box.axis[i].y, box.axis[i].x);
 		axis.setRotation(rotation * 180 / M_PI);
 
-		window_.draw(axis);
+		//window_.draw(axis);
 		/*
 		if(  box.overlapInfo[i].overlaps )
 		{
@@ -80,4 +83,23 @@ void GraphicsContext::Update()
 
 		// end the current frame
 	}
+}
+
+void GraphicsContext::DrawLine( const Vector2& start, const Vector2& end, const sf::Color color)
+{
+	Vector2 edge = end - start;
+	sf::RectangleShape line(sf::Vector2f(edge.getLength(), 1));
+	line.setPosition(start.x, start.y);
+	line.setRotation(atan2(edge.y, edge.x) * 180 / PI);
+	line.setFillColor(color);
+
+	window_.draw(line);
+}
+
+void GraphicsContext::DrawPoint( const Vector2& pt, const sf::Color color /*= sf::Color(0, 0, 255)*/ )
+{
+	sf::RectangleShape point(sf::Vector2f(5, 5));
+	point.setPosition(pt.x, pt.y);
+	point.setFillColor(color);
+	window_.draw(point);
 }

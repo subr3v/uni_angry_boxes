@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include "OrientedBoundingBox.h"
 #include <vector>
+#include "Manifold.h"
 
 class PhysicsObject;
 
@@ -21,8 +22,11 @@ public:
 	inline void gravity(const Vector2& gravity) { m_gravity = gravity; }
 	inline const Vector2 gravity() const { return m_gravity; }
 private:
-	void collisionCheckAndRespond(PhysicsObject* obj);
 
+	void integrateForce(PhysicsObject* object, float dt);
+	void integrateVelocity(PhysicsObject* object, float dt);
+
+	std::vector<Manifold> contacts;
 	std::vector<PhysicsObject*> m_objects;
 	Vector2 m_gravity;
 };
