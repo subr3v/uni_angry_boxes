@@ -73,6 +73,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
@@ -80,6 +81,8 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelScreenState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manifold.cpp" />
+    <ClCompile Include="OrientedBoundingBox.cpp" />
     <ClCompile Include="PhysicObject.cpp" />
     <ClCompile Include="PhysicsSimulation.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
@@ -88,12 +91,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameplayState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GraphicsContext.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LevelScreenState.h" />
+    <ClInclude Include="Manifold.h" />
     <ClInclude Include="OrientedBoundingBox.h" />
     <ClInclude Include="PhysicObject.h" />
     <ClInclude Include="PhysicsSimulation.h" />

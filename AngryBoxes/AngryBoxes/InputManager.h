@@ -3,16 +3,9 @@
 
 #include <SFML/Window.hpp>
 
-
-
-
 class InputManager
 {
-
-
-
 public:
-
 	void init(sf::Window*);
 	void getInput();
 	bool getReleaseBox();
@@ -34,9 +27,6 @@ protected:
 	
 	int currentXPos, currentYPos;
 	int xDragStart, yDragStart, xDragEnd, yDragEnd;
-
-
-
 };
 
 
