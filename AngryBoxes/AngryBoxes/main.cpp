@@ -4,6 +4,7 @@
 #include "PhysicsSimulation.h"
 #include "PhysicObject.h"
 #include "InputManager.h"
+#include "GameplayState.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -11,6 +12,9 @@ int main()
 {
 
 	InputManager input;
+	GamePlayState Game;
+
+	Game.Start(&input);
     // create the window
     //sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 	GraphicsContext graphicsContext;
@@ -46,7 +50,15 @@ int main()
 
 	while (true)
 	{
-		input.getInput();
+
+		if(Game.isInputStage == true)
+		{
+			Game.runInput();
+		}
+		else
+		{
+			Game.runSimulation();
+		}
 		graphicsContext.Update();
 		graphicsContext.Clear();
 
