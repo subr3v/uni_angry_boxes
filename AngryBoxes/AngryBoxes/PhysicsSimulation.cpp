@@ -67,7 +67,7 @@ void PhysicsSimulation::step(float dt) {
 	for(int i = 0; i < contacts.size( ); ++i)
 		contacts[i].init(dt);
 
-	const int kIterationNumber = 16;
+	const int kIterationNumber = 2;
 	// Solve collision
 	for(int j = 0; j < kIterationNumber; ++j)
 		for(int i = 0; i < contacts.size( ); ++i)
@@ -109,7 +109,7 @@ void PhysicsSimulation::integrateVelocity( PhysicsObject* object, float dt )
 
 		context->DrawLine(object->position, object->position + object->velocity);
 
-		object->shape.UpdateOBB2D(object->position, object->rotation);
 		integrateForce(object, dt);
 	}
+	object->shape.UpdateOBB2D(object->position, object->rotation);
 }
