@@ -57,7 +57,8 @@ void Manifold::init(float dt)
 void Manifold::applyImpulse()
 {
 	// Early out and positional correct if both objects have infinite mass
-	if( fequals(a->inverseMass, 0) && fequals(b->inverseMass, 0))
+	if( fequals(a->inverseMass, 0) && fequals(b->inverseMass, 0)
+		|| (b->inverseMass == 0 && contactCount == 2))
 	{
 		solveInfiniteMass();
 		return;
@@ -80,7 +81,7 @@ void Manifold::applyImpulse()
 
 		float raCrossN = cross(ra, normal);
 		float rbCrossN = cross(rb, normal);
-		float inverseMassSum = a->inverseMass + b->inverseMass;// + (sqrt(raCrossN) * a->inverseInertia) + (sqrt(rbCrossN) * b->inverseInertia);
+		float inverseMassSum = a->inverseMass + b->inverseMass; // + (sqrt(raCrossN) * a->inverseInertia) + (sqrt(rbCrossN) * b->inverseInertia);
 
 		// Calculate impulse scalar
 		float j = -(1.0f + restitution) * contactVel;
@@ -125,8 +126,8 @@ void Manifold::solvePosition()
 {
 	if( a->mass == 0 )
 		return;
-	const float kThreshold = 0.05f; // Threshold
-	const float percent = 0.01f; // Penetration percentage to correct
+	const float kThreshold = 1.05f; // Threshold
+	const float percent = 0.001f; // Penetration percentage to correct
 	Vector2 correction = -normal * (std::max( penetrationAmount - kThreshold, 0.0f ) / (a->inverseMass + b->inverseMass)) * percent;
 	//Vector2 correction = -normal * penetrationAmount * percent; // (std::max( penetrationAmount - kThreshold, 0.0f ) / (a->inverseMass + b->inverseMass)) * percent;
 	a->position -= correction * a->inverseMass;

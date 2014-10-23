@@ -14,7 +14,7 @@ public:
 	void applyImpulse( const Vector2& impulse, const Vector2& contactVector )
 	{
 		velocity += impulse * inverseMass;
-		angularVelocity += inverseInertia * cross(contactVector, impulse);
+		angularVelocity += /*inverseInertia * */ cross(contactVector, impulse) * 0.0001f;
 	}
 
 	float restitution;

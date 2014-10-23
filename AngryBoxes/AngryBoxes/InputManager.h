@@ -17,9 +17,12 @@ public:
 	int getCurrentXPos();
 	int getCurrentYPos();
 
+	bool IsButtonPressed() { return isButtonPressed; }
+
 protected:
 
 	bool releaseBox;
+	bool isButtonPressed;
 
 	//instance of event class which stores event
 	sf::Event EventManager; 

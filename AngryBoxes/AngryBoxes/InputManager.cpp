@@ -3,6 +3,7 @@
 
 void InputManager::init(sf::Window* applicationPointer)
 {
+	isButtonPressed = false;
 	windowPointer = applicationPointer;
 }
 
@@ -31,6 +32,7 @@ void InputManager::getInput()
 			//Takes down drag start location when left click
 			case sf::Event::MouseButtonPressed :
 			{
+				isButtonPressed = true;
 				if(EventManager.mouseButton.button == sf::Mouse::Left)
 				{
 					xDragStart = EventManager.mouseButton.x;
@@ -43,6 +45,7 @@ void InputManager::getInput()
 			
 			case sf::Event::MouseButtonReleased :
 			{
+				isButtonPressed = false;
 				if(EventManager.mouseButton.button == sf::Mouse::Left)
 				{
 					releaseBox = true;
