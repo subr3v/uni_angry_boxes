@@ -71,6 +71,8 @@ bool OrientedBoundingBox::Overlaps1Way(OrientedBoundingBox& other, OverlapResult
 			
 		if (overlaps)
 		{
+			amounts[a] = tMax - tMin;
+			/*
 			if ( (tMin > 1 + origin[a]) )
 			{
 				amounts[a] = tMin;
@@ -78,7 +80,7 @@ bool OrientedBoundingBox::Overlaps1Way(OrientedBoundingBox& other, OverlapResult
 			else
 			{
 				amounts[a] = tMax;
-			}
+			}*/
 		} else {
 			amounts[a] = 0;
 			return false;
@@ -90,7 +92,7 @@ bool OrientedBoundingBox::Overlaps1Way(OrientedBoundingBox& other, OverlapResult
 			// There was no intersection along this dimension;
 			// the boxes cannot possibly overlap.
 			return false;
-		}
+		}/
 		*/
 	}
 
@@ -99,7 +101,7 @@ bool OrientedBoundingBox::Overlaps1Way(OrientedBoundingBox& other, OverlapResult
 		result->normal = amounts[0] > amounts[1] ? axis[0] : axis[1];
 		result->normal = result->normal.leftNormal();
 		result->normal.normalize();
-		result->penetration = std::max(amounts[0], amounts[1]);
+		result->penetration = std::min(amounts[0], amounts[1]);
 		result->overlaps = true;
 		
 		int contactIndex = 0;

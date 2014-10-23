@@ -24,7 +24,7 @@ void Manifold::solve()
 		normal = a->position - (contactPoints[0] + contactPoints[1]) * 0.5f;
 		normal.normalize();
 
-		context->DrawLine(contactPoints[0], contactPoints[0] + normal * penetrationAmount * 50, sf::Color::Yellow);
+		//context->DrawLine(contactPoints[0], contactPoints[0] + normal * penetrationAmount * 50, sf::Color::Yellow);
 		//a->position += normal * penetrationAmount;
 	}
 }
@@ -119,16 +119,23 @@ void Manifold::applyImpulse()
 		// Apply friction impulse
 		a->applyImpulse(-tangentImpulse, ra);
 		b->applyImpulse(tangentImpulse, rb);
+
+		if ( b->mass == 0 )
+		{
+			a->velocity *= 0.9999f;
+		}
 	}
 }
 
 void Manifold::solvePosition()
 {
-	if( a->mass == 0 )
-		return;
-	const float kThreshold = 1.05f; // Threshold
-	const float percent = 0.001f; // Penetration percentage to correct
-	Vector2 correction = -normal * (std::max( penetrationAmount - kThreshold, 0.0f ) / (a->inverseMass + b->inverseMass)) * percent;
+	return;
+	//if( a->mass == 0 )
+		//return;
+	const float kThreshold = 0.05f; // Threshold
+	const float percent = 0.005f; // Penetration percentage to correct
+	float correctionMagnitude = std::max(penetrationAmount - kThreshold, 0.0f) / (a->inverseMass + b->inverseMass);
+	Vector2 correction = -normal * correctionMagnitude * percent;
 	//Vector2 correction = -normal * penetrationAmount * percent; // (std::max( penetrationAmount - kThreshold, 0.0f ) / (a->inverseMass + b->inverseMass)) * percent;
 	a->position -= correction * a->inverseMass;
 	b->position += correction * b->inverseMass;
