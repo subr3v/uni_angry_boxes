@@ -4,10 +4,8 @@ void GamePlayState::runSimulation()
 {
 	if(isSimulationStage == true)
 	{
-		//run Simulation
-		
-		//If simulation done 
-			//isSimulationStage = false isInputStage = true
+
+		isInputStage = true;
 	}
 
 	if(GameInput->getReleaseBox() == true)
@@ -26,14 +24,15 @@ void GamePlayState::runInput()
 	if(GameInput->getReleaseBox() == true)
 	{
 		isSimulationStage = true;
-		isInputStage = false;
 		releaseBox();
+		isInputStage = false;
 	}
 }
 
 //Sets states to default upon moving to GamePlayState
-void GamePlayState::Start()
+void GamePlayState::Start(InputManager* Input)
 {
+	GameInput = Input;
 	isInputStage = true;
 	isSimulationStage = false;
 	isCurrentState = true;
@@ -56,6 +55,8 @@ void GamePlayState::releaseBox()
 		float yLength = 0;
 		float releaseAngle = 0;
 		float releaseVelocity = 0;
+		float xVelocity = 0;
+		float yVelocity = 0;
 
 		xLength = GameInput->getXDragStart() - GameInput->getXDragEnd();
 		yLength = GameInput->getYDragStart() - GameInput->getXDragEnd();
@@ -66,11 +67,15 @@ void GamePlayState::releaseBox()
 			xLength = 1;
 		}
 
-		releaseAngle = atan(yLength/xLength);
+		releaseAngle = -atan(yLength/xLength);
 
 		releaseVelocity =  sqrt(pow(xLength, 2) + pow(yLength, 2)) * VELOCITY_MOD;
 
+		yVelocity = sin(releaseAngle) * releaseVelocity;
+		xVelocity = cos(releaseAngle) * releaseVelocity;
 
+		vector.x = xVelocity;
+		vector.y = yVelocity;
 	}
 
 	//Pass bird to sim and start sim
